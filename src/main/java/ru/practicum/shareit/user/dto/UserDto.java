@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class User {
+public class UserDto {
     private Long id;
     @NotBlank(message = "Наименование должен быть указано")
     private String name;
-    @Email(message = "User's email has wrong format")
-    @NotBlank(message = "User's email missing")
+    @Email(message = "Email имеет некорректный формат")
+    @NotBlank(message = "Наименование должен быть указано")
     private String email;
 }
