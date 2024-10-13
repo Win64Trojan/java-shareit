@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
@@ -15,7 +16,7 @@ public class ItemMapper {
         return itemDto;
     }
 
-    public static Item toItem(ItemDto itemDto, long  ownerId) {
+    public static Item toItem(ItemDto itemDto, long ownerId) {
         Item item = new Item(itemDto.getId(),
                 ownerId,
                 itemDto.getName(),

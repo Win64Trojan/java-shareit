@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.dto.BookingDto;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
     public static BookingDto toBookingDto(Booking booking) {
