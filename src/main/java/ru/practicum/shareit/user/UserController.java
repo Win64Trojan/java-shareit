@@ -19,7 +19,6 @@ public class UserController {
     public UserDto get(@PathVariable long id) {
         log.info("Запрос User по id: {}", id);
         UserDto userDto = service.findById(id);
-        log.info("Возврат user: {}", userDto);
         return userDto;
     }
 
@@ -27,7 +26,6 @@ public class UserController {
     public UserDto create(@RequestBody @Valid UserDto userDto) {
         log.info("==>Создание User: {}", userDto);
         UserDto newUserDto = service.create(userDto);
-        log.info("<==Создан User: {}", userDto);
         return newUserDto;
     }
 
@@ -35,7 +33,6 @@ public class UserController {
     public UserDto update(@PathVariable long id, @RequestBody UserDto userDto) {
         log.info("==>Обновление User: {}", userDto);
         UserDto userUpdDto = service.update(id, userDto);
-        log.info("<==Обновление User: {}", userDto);
         return userUpdDto;
     }
 
@@ -43,6 +40,5 @@ public class UserController {
     public void delete(@PathVariable long id) {
         log.info("==>Удалениее User по: {}", id);
         service.delete(id);
-        log.info("<==Успешно удален");
     }
 }

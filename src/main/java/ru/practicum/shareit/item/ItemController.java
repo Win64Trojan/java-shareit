@@ -21,7 +21,6 @@ public class ItemController {
     public ItemDto get(@PathVariable long id) {
         log.info("==>Получение Item по id: {}", id);
         ItemDto itemDto = service.findById(id);
-        log.info("<==Возврат Item: {}", itemDto);
         return itemDto;
     }
 
@@ -29,7 +28,6 @@ public class ItemController {
     public Collection<ItemDto> getByOwnerId(@RequestHeader(userParmHeader) long userId) {
         log.info("==>Получение Item по Владельцу: {}", userId);
         Collection<ItemDto> itemsByOwner = service.findByOwner(userId);
-        log.info("<==Получен Item по Владельцу: {}", userId);
         return itemsByOwner;
     }
 
@@ -37,7 +35,6 @@ public class ItemController {
     public Collection<ItemDto> getItemBySearch(@RequestParam String text) {
         log.info("==>Получение Item по поиску со словом : {}", text);
         Collection<ItemDto> itemsBySearch = service.findBySearch(text);
-        log.info("==>Получен Item по поиску со словом : {}", text);
         return itemsBySearch;
     }
 
@@ -46,7 +43,6 @@ public class ItemController {
                           @RequestBody @Valid ItemDto itemDto) {
         log.info("==>Создание Item: {} с владельцем {}", itemDto, userId);
         ItemDto newItemDto = service.create(itemDto, userId);
-        log.info("<==Создан Item: {} с владельцем {}", itemDto, userId);
         return newItemDto;
     }
 
@@ -56,7 +52,6 @@ public class ItemController {
                           @RequestBody ItemDto itemDto) {
         log.info("==>Обновление Item: {} владельца {}", itemDto, userId);
         ItemDto updItemDto = service.update(itemId, itemDto, userId);
-        log.info("<==Обновлен Item: {} владельца {}", itemDto, userId);
         return updItemDto;
     }
 
@@ -64,6 +59,5 @@ public class ItemController {
     public void delete(@PathVariable long id) {
         log.info("==>Удаление Item по: {}", id);
         service.delete(id);
-        log.info("<==Успешно удален Item по: {}", id);
     }
 }
