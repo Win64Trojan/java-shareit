@@ -1,23 +1,35 @@
 package ru.practicum.shareit.item.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import jdk.jfr.BooleanFlag;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.user.User;
 
-@Data
+@Builder
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "items", schema = "public")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
-    private Long id;
-    private Long ownerId;
-    @NotBlank(message = "Наименование должен быть указано")
-    private String name;
-    @NotBlank(message = "Описание должен быть указано")
-    private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    User owner;
+    @Column(name = "NAME", length = 200, nullable = false)
+    String name;
+    @Column(length = 100, nullable = false)
+    String description;
     @BooleanFlag
-    @NotNull(message = "Доступность не может быть null")
-    private Boolean available;
-    private ItemRequest request;
+    @Column(name = "available", nullable = false)
+    Boolean available;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    ItemRequest request;
 }
