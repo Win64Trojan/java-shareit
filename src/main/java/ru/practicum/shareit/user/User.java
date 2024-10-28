@@ -17,7 +17,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @NotBlank(message = "Наименование должен быть указано")
     @Column(nullable = false)
     String name;
     @Email(message = "User's email has wrong format")
