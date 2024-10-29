@@ -21,23 +21,24 @@ import ru.practicum.shareit.item.services.ItemService;
 
 import java.util.Collection;
 
+import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService service;
-    static final String userParmHeader = "X-Sharer-User-Id";
 
     @GetMapping("/{id}")
-    public ItemDto get(@RequestHeader(userParmHeader) long userId, @PathVariable long id) {
+    public ItemDto get(@RequestHeader(USER_PARM_HEADER) long userId, @PathVariable long id) {
         log.info("==>Получение Item по id: {}", id);
         ItemDto itemDto = service.findById(id, userId);
         return itemDto;
     }
 
     @GetMapping
-    public Collection<ItemDto> getByOwnerId(@RequestHeader(userParmHeader) long userId) {
+    public Collection<ItemDto> getByOwnerId(@RequestHeader(USER_PARM_HEADER) long userId) {
         log.info("==>Получение Item по Владельцу: {}", userId);
         Collection<ItemDto> itemsByOwner = service.findByOwner(userId);
         return itemsByOwner;
@@ -51,7 +52,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto create(@RequestHeader(userParmHeader) long userId,
+    public ItemDto create(@RequestHeader(USER_PARM_HEADER) long userId,
                           @RequestBody @Valid ItemDto itemDto) {
         log.info("==>Создание Item: {} с владельцем {}", itemDto, userId);
         ItemDto newItemDto = service.create(itemDto, userId);
@@ -59,7 +60,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader(userParmHeader) long userId,
+    public ItemDto update(@RequestHeader(USER_PARM_HEADER) long userId,
                           @PathVariable long itemId,
                           @RequestBody ItemDto itemDto) {
         log.info("==>Обновление Item: {} владельца {}", itemDto, userId);
@@ -75,7 +76,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto createComment(@NotNull @RequestHeader(userParmHeader) long userId,
+    public CommentDto createComment(@NotNull @RequestHeader(USER_PARM_HEADER) long userId,
                                     @PathVariable long itemId,
                                     @RequestBody @Valid CommentInfoDto commentInfoDto) {
         log.info("==>Создание коментария к Item по: {}", itemId);
