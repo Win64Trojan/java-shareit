@@ -19,8 +19,6 @@ import ru.practicum.shareit.user.services.UserService;
 
 import java.util.List;
 
-import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
-
 
 @Slf4j
 @RestController
@@ -29,6 +27,8 @@ import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
 public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
+
+    static final String USER_PARM_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
     public OutputBookingDto create(@RequestHeader(USER_PARM_HEADER) long userId,
