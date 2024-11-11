@@ -13,7 +13,6 @@ import ru.practicum.shareit.booking.dto.BookingApproveDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.OutputBookingDto;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidatetionConflict;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 
@@ -186,14 +185,14 @@ class BaseBookingServiceTest {
 
     @Test
     void findByBookerIfStatusNotValidTest() {
-        assertThrows(ValidatetionConflict.class, () -> {
+        assertThrows(ValidationException.class, () -> {
             service.findByBookerId(2, "NotValidStutus");
         }, "Нет сообщения: Некорректный статус Booking");
     }
 
     @Test
     void findByOwnerIfStatusNotValidTest() {
-        assertThrows(ValidatetionConflict.class, () -> {
+        assertThrows(ValidationException.class, () -> {
             service.findByOwnerId(1, "NotValidStutus");
         }, "Нет сообщения: Некорректный статус Booking");
     }

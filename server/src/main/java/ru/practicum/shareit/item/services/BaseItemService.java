@@ -9,7 +9,6 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidatetionConflict;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentInfoDto;
@@ -60,7 +59,7 @@ public class BaseItemService implements ItemService {
         User owner = getUser(ownerId);
         Item oldItem = getItem(itemUpd.getId());
         if (!oldItem.getOwner().equals(owner)) {
-            throw new ValidatetionConflict("Некорректный владелец");
+            throw new ValidationException("Некорректный владелец");
         }
         if (itemUpd.getName() != null) {
             oldItem.setName(itemUpd.getName());

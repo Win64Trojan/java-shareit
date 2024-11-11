@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidatetionConflict;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentInfoDto;
@@ -51,7 +50,7 @@ class BaseItemServiceTest {
     @Test
     void updateItemIfNotValidOwnerTest() {
         itemDto1.setName("Спальный мешок для похода размер XXL");
-        assertThrows(ValidatetionConflict.class, () -> {
+        assertThrows(ValidationException.class, () -> {
             service.update(itemDto1, userId2);
         }, "Нет сообщения: Некорректный владелец");
     }

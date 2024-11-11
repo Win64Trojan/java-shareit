@@ -12,7 +12,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.OutputBookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidatetionConflict;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -105,7 +104,7 @@ public class BaseBookingService implements BookingService {
         List<Booking> listBooking = new ArrayList<>();
         User booker = getUser(bookerId);
         if (BookingStatus.from(status) == null) {
-            throw new ValidatetionConflict("Некорректный статус Booking");
+            throw new ValidationException("Некорректный статус Booking");
         }
         BookingStatus bookingStatus = BookingStatus.from(status);
         switch (bookingStatus) {
@@ -138,7 +137,7 @@ public class BaseBookingService implements BookingService {
         List<Booking> listBooking = new ArrayList<>();
         User owner = getUser(ownerId);
         if (BookingStatus.from(status) == null) {
-            throw new ValidatetionConflict("Некорректный статус Booking");
+            throw new ValidationException("Некорректный статус Booking");
         }
         BookingStatus bookingStatus = BookingStatus.from(status);
         switch (bookingStatus) {
