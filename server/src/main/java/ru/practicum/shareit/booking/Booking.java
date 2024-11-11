@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,10 +35,8 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @FutureOrPresent
     @Column(name = "start_date")
     LocalDateTime start;
-    @FutureOrPresent
     @Column(name = "end_date")
     LocalDateTime end;
     @ManyToOne(fetch = FetchType.LAZY)

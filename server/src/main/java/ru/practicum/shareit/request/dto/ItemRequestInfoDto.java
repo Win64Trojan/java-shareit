@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request.dto;
 
-import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ public class ItemRequestInfoDto {
     Long id;
     String description;
     UserDto requestor;
-    @FutureOrPresent
     LocalDateTime created;
     List<ItemForRequestDto> items;
 }

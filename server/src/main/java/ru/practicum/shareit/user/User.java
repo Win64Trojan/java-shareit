@@ -6,8 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +26,6 @@ public class User {
     Long id;
     @Column(nullable = false)
     String name;
-    @Email(message = "User's email has wrong format")
-    @NotBlank(message = "User's email missing")
     @Column(nullable = false, unique = true)
     String email;
 }
