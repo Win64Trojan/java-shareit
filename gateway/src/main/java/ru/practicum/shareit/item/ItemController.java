@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
     private final ItemClient client;
+
+    static final String USER_PARM_HEADER = "X-Sharer-User-Id";
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> get(@RequestHeader(USER_PARM_HEADER) long userId, @PathVariable long id) {

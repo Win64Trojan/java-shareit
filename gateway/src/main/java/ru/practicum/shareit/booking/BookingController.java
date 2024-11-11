@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingState;
 
-import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
-
 @Controller
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
@@ -27,6 +25,8 @@ import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
 @Validated
 public class BookingController {
     private final BookingClient bookingClient;
+
+    static final String USER_PARM_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader(USER_PARM_HEADER) long userId,
