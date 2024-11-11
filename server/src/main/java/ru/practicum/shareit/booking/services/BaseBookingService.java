@@ -18,9 +18,11 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BaseBookingService implements BookingService {
@@ -28,12 +30,14 @@ public class BaseBookingService implements BookingService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private static final Sort NEWEST_FIRST = Sort.by(Sort.Direction.DESC, "start");
+
     @Override
     @Transactional
     public void delete(long id) {
         Booking booking = getBooking(id);
         bookingRepository.delete(booking);
     }
+
     @Override
     @Transactional
     public OutputBookingDto create(BookingDto bookingDto, long bookerId) {
@@ -60,6 +64,7 @@ public class BaseBookingService implements BookingService {
                 .build();
         return BookingMapper.toOutputBookingDto(bookingRepository.save(booking));
     }
+
     @Override
     @Transactional
     public OutputBookingDto approve(BookingApproveDto bookingApproveDto, long id) {
@@ -79,6 +84,7 @@ public class BaseBookingService implements BookingService {
         }
         return BookingMapper.toOutputBookingDto(bookingRepository.save(booking));
     }
+
     @Override
     @Transactional(readOnly = true)
     public OutputBookingDto findById(long bookingId, long userId) {
@@ -92,6 +98,7 @@ public class BaseBookingService implements BookingService {
         }
         return bookingDto;
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<OutputBookingDto> findByBookerId(long bookerId, String status) {
@@ -124,6 +131,7 @@ public class BaseBookingService implements BookingService {
                 .map(BookingMapper::toOutputBookingDto)
                 .toList();
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<OutputBookingDto> findByOwnerId(long ownerId, String status) {
@@ -156,14 +164,17 @@ public class BaseBookingService implements BookingService {
                 .map(BookingMapper::toOutputBookingDto)
                 .toList();
     }
+
     private User getUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: не найден:" + userId));
     }
+
     private Item getItem(long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Item  с id: не найден: " + itemId));
     }
+
     private Booking getBooking(long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking с id: не найден: " + bookingId));

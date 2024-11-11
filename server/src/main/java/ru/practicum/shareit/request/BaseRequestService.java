@@ -53,7 +53,7 @@ public class BaseRequestService implements ItemRequestService {
         ItemRequest itemRequest = itemRequestRepository.findById(itemRequestId)
                 .orElseThrow(() -> new NotFoundException(String.format("Request с id = %d не найден.", itemRequestId)));
 
-        List<Item>  items = itemRepository.findAllByItemRequest(itemRequest);
+        List<Item> items = itemRepository.findAllByItemRequest(itemRequest);
         ItemRequestInfoDto itemRequestInfoDto = RequestMapper.toItemRequestDto(itemRequest);
         itemRequestInfoDto.setItems(ItemMapper.toItemsDtoForRequest(items));
         return itemRequestInfoDto;

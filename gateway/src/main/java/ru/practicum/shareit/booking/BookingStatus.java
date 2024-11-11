@@ -12,13 +12,13 @@ public enum BookingStatus {
     REJECTED,
     CANCELED;
 
-    public static Optional<BookingStatus> from(String  status) {
+    public static Optional<BookingStatus> from(String status) {
         for (BookingStatus value : BookingStatus.values()) {
             if (value.name().equals(status)) {
                 return Optional.of(value);
             }
         }
-        return  Optional.empty();
+        return Optional.empty();
     }
 
 }

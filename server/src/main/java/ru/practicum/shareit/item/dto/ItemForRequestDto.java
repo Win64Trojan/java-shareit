@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemForRequestDto {
-    Long   id;
+    Long id;
     String name;
     Long ownerId;
 }

@@ -29,9 +29,10 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class BaseItemService implements  ItemService {
+public class BaseItemService implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
@@ -72,11 +73,13 @@ public class BaseItemService implements  ItemService {
         }
         return ItemMapper.toItemDto(itemRepository.save(itemRepository.save(oldItem)));
     }
+
     @Override
     @Transactional
     public void delete(long itemId) {
         itemRepository.delete(itemRepository.findById(itemId).get());
     }
+
     @Override
     @Transactional(readOnly = true)
     public ItemDto findById(long itemId, long userId) {
@@ -90,6 +93,7 @@ public class BaseItemService implements  ItemService {
         itemDto.setComments(comments);
         return itemDto;
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<ItemDto> findByOwner(long ownerId) {
@@ -107,6 +111,7 @@ public class BaseItemService implements  ItemService {
         }
         return itemsDto;
     }
+
     @Override
     @Transactional
     public Collection<ItemDto> findBySearch(String text) {
@@ -115,6 +120,7 @@ public class BaseItemService implements  ItemService {
                 .map(ItemMapper::toItemDto)
                 .toList();
     }
+
     @Transactional
     @Override
     public CommentDto createComment(long itemId, long userId, CommentInfoDto commentDto) {
@@ -133,6 +139,7 @@ public class BaseItemService implements  ItemService {
 
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
+
     private void setLastNextBooking(ItemDto itemDto) {
         LocalDateTime toDay = LocalDateTime.now();
         List<Booking> listApproveBooking = bookingRepository.findApprovedForItem(getItem(itemDto.getId()), Sort.by(Sort.Direction.DESC, "start"));

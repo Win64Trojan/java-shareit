@@ -8,8 +8,10 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import java.util.List;
+
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByOwner(User user);
+
     @Query("SELECT i FROM Item i " +
             "WHERE (LOWER(i.name) LIKE LOWER(CONCAT('%', :text, '%')) " +
             "OR LOWER(i.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +

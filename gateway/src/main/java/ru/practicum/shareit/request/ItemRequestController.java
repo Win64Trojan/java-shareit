@@ -11,26 +11,27 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static ru.practicum.shareit.constans.Constants.USER_PARM_HEADER;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
     private final ItemRequestClient itemRequestClient;
-    static final String userParmHeader = "X-Sharer-User-Id";
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestHeader(userParmHeader) Long userId,
+    public ResponseEntity<Object> create(@RequestHeader(USER_PARM_HEADER) Long userId,
                                          @Valid @RequestBody ItemRequestDto itemRequestRequestDto) {
         return itemRequestClient.create(userId, itemRequestRequestDto);
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestHeader(userParmHeader) Long userId) {
+    public ResponseEntity<Object> findAll(@RequestHeader(USER_PARM_HEADER) Long userId) {
         return itemRequestClient.findAll(userId);
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> findItemRequestById(@RequestHeader(userParmHeader) Long userId,
+    public ResponseEntity<Object> findItemRequestById(@RequestHeader(USER_PARM_HEADER) Long userId,
                                                       @PathVariable Long requestId) {
         return itemRequestClient.findItemRequestById(userId, requestId);
     }
