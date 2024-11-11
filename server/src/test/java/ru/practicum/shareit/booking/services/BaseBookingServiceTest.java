@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.services;
 
-
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
