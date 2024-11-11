@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.dto;
 
-import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +13,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDto {
     Long id;
-    @FutureOrPresent
     LocalDateTime start;
-    @FutureOrPresent
     LocalDateTime end;
     Long itemId;
     Long booker;

@@ -8,8 +8,9 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
-import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidationException;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidatetionConflict;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentInfoDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -31,7 +32,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BaseItemService implements ItemService {
+public class BaseItemService implements  ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
@@ -58,8 +59,9 @@ public class BaseItemService implements ItemService {
     public ItemDto update(ItemDto itemUpd, long ownerId) {
         User owner = getUser(ownerId);
         Item oldItem = getItem(itemUpd.getId());
+
         if (!oldItem.getOwner().equals(owner)) {
-            throw new ValidationException("Некорректный владелец");
+            throw new ValidatetionConflict("Некорректный владелец");
         }
         if (itemUpd.getName() != null) {
             oldItem.setName(itemUpd.getName());
@@ -84,6 +86,7 @@ public class BaseItemService implements ItemService {
     public ItemDto findById(long itemId, long userId) {
         Item item = getItem(itemId);
         ItemDto itemDto = ItemMapper.toItemDto(item);
+
         if (item.getOwner().getId().equals(userId)) {
             setLastNextBooking(itemDto);
         }
@@ -103,6 +106,7 @@ public class BaseItemService implements ItemService {
                 .map(ItemMapper::toItemDto)
                 .toList();
         for (ItemDto iDto : itemsDto) {
+
             setLastNextBooking(iDto);
             List<CommentDto> comments = commentRepository.findByItem(getItem(iDto.getId())).stream()
                     .map(CommentMapper::toCommentDto).toList();
@@ -114,6 +118,7 @@ public class BaseItemService implements ItemService {
     @Override
     @Transactional
     public Collection<ItemDto> findBySearch(String text) {
+
         return itemRepository.searchByNameOrDescription(text)
                 .stream()
                 .map(ItemMapper::toItemDto)
@@ -175,5 +180,6 @@ public class BaseItemService implements ItemService {
         return bookingRepository.findByBookerAndItem(booker, item)
                 .orElseThrow(() -> new NotFoundException("Бронирование вещи с id: " + item.getId() +
                         "с пользователем с id: " + booker.getId() + " not found"));
+
     }
 }

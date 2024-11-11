@@ -1,4 +1,4 @@
-package ru.practicum.shareit.exceptions;
+package ru.practicum.shareit.exception;
 
 public class ValidatetionConflict extends RuntimeException {
     public ValidatetionConflict(String message) {

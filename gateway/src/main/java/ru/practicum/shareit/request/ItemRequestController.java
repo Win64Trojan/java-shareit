@@ -16,22 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
     private final ItemRequestClient itemRequestClient;
-
-    static final String USER_PARM_HEADER = "X-Sharer-User-Id";
+    static final String userParmHeader = "X-Sharer-User-Id";
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestHeader(USER_PARM_HEADER) Long userId,
+    public ResponseEntity<Object> create(@RequestHeader(userParmHeader) Long userId,
                                          @Valid @RequestBody ItemRequestDto itemRequestRequestDto) {
         return itemRequestClient.create(userId, itemRequestRequestDto);
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestHeader(USER_PARM_HEADER) Long userId) {
+    public ResponseEntity<Object> findAll(@RequestHeader(userParmHeader) Long userId) {
         return itemRequestClient.findAll(userId);
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> findItemRequestById(@RequestHeader(USER_PARM_HEADER) Long userId,
+    public ResponseEntity<Object> findItemRequestById(@RequestHeader(userParmHeader) Long userId,
                                                       @PathVariable Long requestId) {
         return itemRequestClient.findItemRequestById(userId, requestId);
     }

@@ -3,7 +3,7 @@ package ru.practicum.shareit.request;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -53,7 +53,7 @@ public class BaseRequestService implements ItemRequestService {
         ItemRequest itemRequest = itemRequestRepository.findById(itemRequestId)
                 .orElseThrow(() -> new NotFoundException(String.format("Request с id = %d не найден.", itemRequestId)));
 
-        List<Item> items = itemRepository.findAllByItemRequest(itemRequest);
+        List<Item>  items = itemRepository.findAllByItemRequest(itemRequest);
         ItemRequestInfoDto itemRequestInfoDto = RequestMapper.toItemRequestDto(itemRequest);
         itemRequestInfoDto.setItems(ItemMapper.toItemsDtoForRequest(items));
         return itemRequestInfoDto;

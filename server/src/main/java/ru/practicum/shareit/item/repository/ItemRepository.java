@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.User;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
+
     List<Item> findByOwner(User user);
 
     @Query("SELECT i FROM Item i " +

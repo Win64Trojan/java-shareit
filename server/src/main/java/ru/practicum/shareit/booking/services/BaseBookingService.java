@@ -11,8 +11,9 @@ import ru.practicum.shareit.booking.dto.BookingApproveDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.OutputBookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
-import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidationException;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidatetionConflict;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
@@ -54,6 +55,7 @@ public class BaseBookingService implements BookingService {
             throw new ValidationException("Владелец не может создать booking");
         }
         bookingDto.setBooker(booker.getId());
+
         Booking booking = Booking.builder()
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())
@@ -69,6 +71,7 @@ public class BaseBookingService implements BookingService {
     public OutputBookingDto approve(BookingApproveDto bookingApproveDto, long id) {
         Booking booking = getBooking(bookingApproveDto.getId());
         Item item = booking.getItem();
+
         if (!item.getOwner().getId().equals(id)) {
             throw new ValidationException("Подтвердить Booking может только владелец");
         }
@@ -104,27 +107,28 @@ public class BaseBookingService implements BookingService {
         List<Booking> listBooking = new ArrayList<>();
         User booker = getUser(bookerId);
         if (BookingStatus.from(status) == null) {
-            throw new ValidationException("Некорректный статус Booking");
+            throw new ValidatetionConflict("Некорректный статус Booking");
         }
         BookingStatus bookingStatus = BookingStatus.from(status);
         switch (bookingStatus) {
-            case ALL:
+            case BookingStatus.ALL:
                 listBooking = bookingRepository.findByBooker(booker, NEWEST_FIRST);
                 break;
-            case CURRENT:
+            case BookingStatus.CURRENT:
                 listBooking = bookingRepository.findByBookerAndEndAfterAndStartBefore(booker, LocalDateTime.now(), LocalDateTime.now(), NEWEST_FIRST);
                 break;
-            case FUTURE:
+            case BookingStatus.FUTURE:
                 listBooking = bookingRepository.findByBookerAndStartAfter(booker, LocalDateTime.now(), NEWEST_FIRST);
                 break;
-            case PAST:
+            case BookingStatus.PAST:
                 listBooking = bookingRepository.findByBookerAndEndBefore(booker, LocalDateTime.now(), NEWEST_FIRST);
                 break;
-            case WAITING:
-            case REJECTED:
-            case APPROVED:
+            case BookingStatus.WAITING:
+            case BookingStatus.REJECTED:
+            case BookingStatus.APPROVED:
                 listBooking = bookingRepository.findByBookerAndStatusEquals(booker, status, NEWEST_FIRST);
                 break;
+
         }
         return listBooking.stream()
                 .map(BookingMapper::toOutputBookingDto)
@@ -137,25 +141,25 @@ public class BaseBookingService implements BookingService {
         List<Booking> listBooking = new ArrayList<>();
         User owner = getUser(ownerId);
         if (BookingStatus.from(status) == null) {
-            throw new ValidationException("Некорректный статус Booking");
+            throw new ValidatetionConflict("Некорректный статус Booking");
         }
         BookingStatus bookingStatus = BookingStatus.from(status);
         switch (bookingStatus) {
-            case ALL:
+            case BookingStatus.ALL:
                 listBooking = bookingRepository.findByItemOwner(owner, NEWEST_FIRST);
                 break;
-            case CURRENT:
+            case BookingStatus.CURRENT:
                 listBooking = bookingRepository.findByItemOwnerAndEndAfterAndStartBefore(owner, LocalDateTime.now(), LocalDateTime.now(), NEWEST_FIRST);
                 break;
-            case FUTURE:
+            case BookingStatus.FUTURE:
                 listBooking = bookingRepository.findByItemOwnerAndStartAfter(owner, LocalDateTime.now(), NEWEST_FIRST);
                 break;
-            case PAST:
+            case BookingStatus.PAST:
                 listBooking = bookingRepository.findByItemOwnerAndEndBefore(owner, LocalDateTime.now(), NEWEST_FIRST);
                 break;
-            case WAITING:
-            case REJECTED:
-            case APPROVED:
+            case BookingStatus.WAITING:
+            case BookingStatus.REJECTED:
+            case BookingStatus.APPROVED:
                 listBooking = bookingRepository.findByItemOwnerAndStatusEquals(owner, status, NEWEST_FIRST);
                 break;
         }
@@ -167,6 +171,7 @@ public class BaseBookingService implements BookingService {
     private User getUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: не найден:" + userId));
+
     }
 
     private Item getItem(long itemId) {
