@@ -38,6 +38,24 @@ class BaseUserServiceTest {
         userDtoCreate.setName("Ольга");
         UserDto userDtoUpd = service.update(userDtoCreate);
         assertEquals(userDtoCreate.getName(), userDtoUpd.getName());
+
+    }
+
+    @Test
+    void userUpdateTestOldEmail() {
+
+        UserDto userDtoCreate = service.create(userDtoNew);
+        userDtoCreate.setName("Ольга");
+        String oldEmail = userDtoCreate.getEmail();
+        String newEmail = "newemail@example.com";
+        userDtoCreate.setEmail(newEmail);
+
+        UserDto userDtoUpd = service.update(userDtoCreate);
+
+        assertEquals("Ольга", userDtoUpd.getName());
+        assertEquals(newEmail, userDtoUpd.getEmail());
+        assertEquals(userDtoCreate.getId(), userDtoUpd.getId());
+        assertNotEquals(oldEmail, userDtoUpd.getEmail());
     }
 
     @Test
