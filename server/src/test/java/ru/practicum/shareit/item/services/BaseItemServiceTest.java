@@ -6,15 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidatetionConflict;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentInfoDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemForRequestDto;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.practicum.shareit.item.mapper.CommentMapper.toComment;
+import static ru.practicum.shareit.item.mapper.ItemMapper.toItemForRequestDto;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -50,7 +59,7 @@ class BaseItemServiceTest {
     @Test
     void updateItemIfNotValidOwnerTest() {
         itemDto1.setName("Спальный мешок для похода размер XXL");
-        assertThrows(ValidationException.class, () -> {
+        assertThrows(ValidatetionConflict.class, () -> {
             service.update(itemDto1, userId2);
         }, "Нет сообщения: Некорректный владелец");
     }
@@ -61,6 +70,27 @@ class BaseItemServiceTest {
         assertThrows(NotFoundException.class, () -> {
             service.findById(itemId1, userId1);
         }, "Сообщения что запись не найдена нет");
+    }
+
+    @Test
+    void toItemForRequestDtoTest() {
+        // Создаем объект User
+        User user = new User(1L, "Владелец", "owner@example.com");
+
+        // Создаем объект Item
+        Item item = Item.builder()
+                .id(1L)
+                .name("Классный предмет")
+                .owner(user) // Предполагается, что в Item есть метод user()
+                .build();
+
+        // Преобразуем Item в ItemForRequestDto
+        ItemForRequestDto itemForRequestDto = toItemForRequestDto(item);
+
+        // Проверяем, что значения соответствуют ожидаемым
+        assertEquals(item.getId(), itemForRequestDto.getId());
+        assertEquals(item.getName(), itemForRequestDto.getName());
+        assertEquals(item.getOwner().getId(), itemForRequestDto.getOwnerId());
     }
 
     @Test
@@ -91,6 +121,26 @@ class BaseItemServiceTest {
         commentDto.setCreated(commentCreatedDto.getCreated());
 
         assertEquals(commentCreatedDto, commentDto);
+    }
+
+    @Test
+    void toCommentTest() {
+        // Создаем объект CommentDto
+        CommentDto commentDto = CommentDto.builder()
+                .id(1L) // Пример ID
+                .itemId(2L) // Пример itemId
+                .text("Отличный спальный мешок")
+                .authorName("Алена")
+                .created(LocalDateTime.now()) // Устанавливаем текущее время
+                .build();
+
+        // Преобразуем CommentDto в Comment
+        Comment comment = toComment(commentDto);
+
+        // Проверяем, что значения соответствуют ожидаемым
+        assertEquals(commentDto.getId(), comment.getId());
+        assertEquals(commentDto.getText(), comment.getText());
+        assertEquals(commentDto.getCreated(), comment.getCreated());
     }
 
     @Test
