@@ -74,20 +74,17 @@ class BaseItemServiceTest {
 
     @Test
     void toItemForRequestDtoTest() {
-        // Создаем объект User
+
         User user = new User(1L, "Владелец", "owner@example.com");
 
-        // Создаем объект Item
         Item item = Item.builder()
                 .id(1L)
                 .name("Классный предмет")
-                .owner(user) // Предполагается, что в Item есть метод user()
+                .owner(user)
                 .build();
 
-        // Преобразуем Item в ItemForRequestDto
         ItemForRequestDto itemForRequestDto = toItemForRequestDto(item);
 
-        // Проверяем, что значения соответствуют ожидаемым
         assertEquals(item.getId(), itemForRequestDto.getId());
         assertEquals(item.getName(), itemForRequestDto.getName());
         assertEquals(item.getOwner().getId(), itemForRequestDto.getOwnerId());
@@ -125,19 +122,16 @@ class BaseItemServiceTest {
 
     @Test
     void toCommentTest() {
-        // Создаем объект CommentDto
         CommentDto commentDto = CommentDto.builder()
-                .id(1L) // Пример ID
-                .itemId(2L) // Пример itemId
+                .id(1L)
+                .itemId(2L)
                 .text("Отличный спальный мешок")
                 .authorName("Алена")
-                .created(LocalDateTime.now()) // Устанавливаем текущее время
+                .created(LocalDateTime.now())
                 .build();
 
-        // Преобразуем CommentDto в Comment
         Comment comment = toComment(commentDto);
 
-        // Проверяем, что значения соответствуют ожидаемым
         assertEquals(commentDto.getId(), comment.getId());
         assertEquals(commentDto.getText(), comment.getText());
         assertEquals(commentDto.getCreated(), comment.getCreated());
